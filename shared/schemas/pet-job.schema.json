@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shengsheng.example/schemas/pet-job.schema.json",
+  "title": "PetJobRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["child_id", "description"],
+  "properties": {
+    "child_id": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "output_mode": { "type": "string", "enum": ["concept_2d", "template_3d"], "default": "concept_2d" }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "session_id": "session_demo_001",
+  "child_id": "child_anon_001",
+  "transcript": "Yesterday I go to park.",
+  "learner_profile": {
+    "level": 2,
+    "confidence": 0.55,
+    "target_sentence_words": 6,
+    "interests": ["dinosaurs", "drawing"],
+    "recent_topics": ["weekend"]
+  },
+  "audio_metadata": {
+    "duration_ms": 2300,
+    "asr_confidence": 0.88,
+    "detected_language": "en",
+    "is_human_voice": true
+  },
+  "context": []
+}

@@ -1,0 +1,23 @@
+{
+  "turn_id": "turn_demo_001",
+  "reply_text": "You went to the park yesterday! What did you see?",
+  "teaching_action": "recast",
+  "recast_text": "You went to the park yesterday.",
+  "reward": {
+    "valid_speaking_attempt": true,
+    "base_voice_fruit": 1,
+    "bonus_voice_fruit": 0,
+    "reasons": ["meaningful_english_attempt"]
+  },
+  "learner_profile": {
+    "level": 2,
+    "confidence": 0.57,
+    "target_sentence_words": 6,
+    "interests": ["dinosaurs", "drawing"],
+    "recent_topics": ["weekend", "park"]
+  },
+  "safety": {
+    "action": "allow",
+    "reason_code": "none"
+  }
+}

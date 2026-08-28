@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "声生岛",
+    "slug": "shengsheng-island",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.shengshengisland"
+    },
+    "android": {
+      "package": "com.example.shengshengisland"
+    }
+  }
+}
