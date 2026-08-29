@@ -1,4 +1,5 @@
 export type LearnerProfile = {
+  grade?: 1 | 2 | 3 | 4 | 5 | 6;
   level: 1 | 2 | 3 | 4 | 5;
   confidence: number;
   target_sentence_words: number;

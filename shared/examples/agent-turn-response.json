@@ -10,6 +10,7 @@
     "reasons": ["meaningful_english_attempt"]
   },
   "learner_profile": {
+    "grade": 3,
     "level": 2,
     "confidence": 0.57,
     "target_sentence_words": 6,

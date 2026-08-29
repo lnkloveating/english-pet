@@ -3,6 +3,7 @@
   "child_id": "child_anon_001",
   "transcript": "Yesterday I go to park.",
   "learner_profile": {
+    "grade": 3,
     "level": 2,
     "confidence": 0.55,
     "target_sentence_words": 6,

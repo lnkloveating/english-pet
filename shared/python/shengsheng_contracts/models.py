@@ -10,6 +10,7 @@ class ContractModel(BaseModel):
 
 
 class LearnerProfile(ContractModel):
+    grade: int = Field(default=1, ge=1, le=6)
     level: int = Field(default=1, ge=1, le=5)
     confidence: float = Field(default=0.5, ge=0, le=1)
     target_sentence_words: int = Field(default=4, ge=1, le=20)
