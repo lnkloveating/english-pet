@@ -52,6 +52,34 @@ def test_agent_turn_accepts_primary_school_grades(grade: int) -> None:
     assert response.json()["learner_profile"]["grade"] == grade
 
 
+def test_agent_reply_changes_for_younger_and_older_grades() -> None:
+    def post_turn(grade: int):
+        return client.post(
+            "/v1/agent/turn",
+            json={
+                "session_id": f"session_grade_{grade}",
+                "child_id": "child_demo",
+                "transcript": "I like cats.",
+                "learner_profile": {
+                    "grade": grade,
+                    "level": 2,
+                    "confidence": 0.5,
+                    "target_sentence_words": 5,
+                    "interests": [],
+                    "recent_topics": [],
+                },
+            },
+        )
+
+    grade_one = post_turn(1)
+    grade_six = post_turn(6)
+
+    assert grade_one.status_code == 200
+    assert grade_six.status_code == 200
+    assert grade_one.json()["reply_text"].endswith("Do you like it?")
+    assert grade_six.json()["reply_text"].endswith("Why do you think so?")
+
+
 @pytest.mark.parametrize("grade", [0, 7])
 def test_agent_turn_rejects_invalid_grades(grade: int) -> None:
     response = client.post(

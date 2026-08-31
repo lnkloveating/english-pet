@@ -1,7 +1,11 @@
+import asyncio
+
 import pytest
+from shengsheng_contracts import AgentTurnRequest, LearnerProfile
 
 from shengsheng_agent.learning.grade_policy import get_grade_policy
-from shengsheng_agent.prompts.prompt_builder import build_prompt
+from shengsheng_agent.prompts.prompt_builder import AgentPrompt, build_prompt
+from shengsheng_agent.service import AgentService
 
 
 @pytest.mark.parametrize("grade", range(1, 7))
@@ -55,3 +59,38 @@ def test_character_manifest_combines_both_prompt_sections() -> None:
     assert "You are Lumi" in prompt.character_manifest
     assert prompt.system_role in prompt.character_manifest
     assert prompt.speaking_style in prompt.character_manifest
+
+
+def test_agent_service_passes_the_selected_grade_prompt_to_provider() -> None:
+    class CapturingProvider:
+        prompt: AgentPrompt | None = None
+
+        async def reply(
+            self,
+            request: AgentTurnRequest,
+            profile: LearnerProfile,
+            recast_text: str | None,
+            prompt: AgentPrompt,
+        ) -> str:
+            _ = (request, profile, recast_text)
+            self.prompt = prompt
+            return "I hear you! Why do you think so?"
+
+    provider = CapturingProvider()
+    request = AgentTurnRequest(
+        session_id="session_grade_prompt",
+        child_id="child_demo",
+        transcript="I like cats.",
+        learner_profile=LearnerProfile(
+            grade=6,
+            level=2,
+            confidence=0.5,
+            target_sentence_words=5,
+        ),
+    )
+
+    asyncio.run(AgentService(provider=provider).handle_turn(request))
+
+    assert provider.prompt is not None
+    assert "Grade 6 child" in provider.prompt.system_role
+    assert "about 120 words per minute" in provider.prompt.speaking_style
