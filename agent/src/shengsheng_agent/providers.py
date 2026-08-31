@@ -2,6 +2,8 @@ from typing import Protocol
 
 from shengsheng_contracts import AgentTurnRequest, LearnerProfile
 
+from .prompts import AgentPrompt
+
 
 class ResponseProvider(Protocol):
     async def reply(
@@ -9,6 +11,7 @@ class ResponseProvider(Protocol):
         request: AgentTurnRequest,
         profile: LearnerProfile,
         recast_text: str | None,
+        prompt: AgentPrompt,
     ) -> str: ...
 
 
@@ -20,7 +23,9 @@ class StubResponseProvider:
         request: AgentTurnRequest,
         profile: LearnerProfile,
         recast_text: str | None,
+        prompt: AgentPrompt,
     ) -> str:
+        _ = prompt
         if recast_text:
             lead = recast_text
         elif request.transcript.strip():
@@ -28,10 +33,10 @@ class StubResponseProvider:
         else:
             return "That's okay. You can say one word, like 'cat'."
 
-        if profile.level <= 1:
+        if profile.grade <= 2:
             question = "Do you like it?"
-        elif profile.level <= 3:
+        elif profile.grade <= 4:
             question = "What happened next?"
         else:
-            question = "How did that make you feel?"
+            question = "Why do you think so?"
         return f"{lead} {question}"

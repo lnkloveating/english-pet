@@ -10,9 +10,14 @@ import {
   View,
 } from "react-native";
 
+import type { LearnerProfile } from "../../shared/typescript/contracts";
 import { sendSpeakingTurn } from "./src/api/client";
 
-const initialProfile = {
+type PrimaryGrade = NonNullable<LearnerProfile["grade"]>;
+
+const primaryGrades = [1, 2, 3, 4, 5, 6] as const satisfies readonly PrimaryGrade[];
+
+const initialProfile: Omit<LearnerProfile, "grade"> = {
   level: 1 as const,
   confidence: 0.5,
   target_sentence_words: 4,
@@ -21,6 +26,7 @@ const initialProfile = {
 };
 
 export default function App() {
+  const [grade, setGrade] = useState<PrimaryGrade>(1);
   const [transcript, setTranscript] = useState("I like dinosaur.");
   const [petReply, setPetReply] = useState("Hi! Tell me one thing you like.");
   const [voiceFruit, setVoiceFruit] = useState(0);
@@ -33,7 +39,7 @@ export default function App() {
         session_id: "local_demo_session",
         child_id: "local_anon_child",
         transcript,
-        learner_profile: initialProfile,
+        learner_profile: { ...initialProfile, grade },
       });
       setPetReply(turn.reply_text);
       setVoiceFruit((value) => value + turn.reward.base_voice_fruit + turn.reward.bonus_voice_fruit);
@@ -54,6 +60,24 @@ export default function App() {
       <View style={styles.petCard}>
         <Text style={styles.pet}>🐾</Text>
         <Text style={styles.reply}>{petReply}</Text>
+      </View>
+      <Text style={styles.label}>选择孩子所在年级</Text>
+      <View style={styles.gradeRow}>
+        {primaryGrades.map((option) => {
+          const selected = option === grade;
+          return (
+            <Pressable
+              accessibilityLabel={`${option}年级`}
+              accessibilityRole="button"
+              accessibilityState={{ selected }}
+              key={option}
+              onPress={() => setGrade(option)}
+              style={[styles.gradeButton, selected && styles.gradeButtonSelected]}
+            >
+              <Text style={[styles.gradeText, selected && styles.gradeTextSelected]}>{option}</Text>
+            </Pressable>
+          );
+        })}
       </View>
       <Text style={styles.label}>MVP 转写输入（下一步替换为录音）</Text>
       <TextInput
@@ -92,6 +116,20 @@ const styles = StyleSheet.create({
   pet: { fontSize: 88 },
   reply: { fontSize: 22, lineHeight: 30, textAlign: "center", color: "#173F36" },
   label: { color: "#5A625F" },
+  gradeRow: { flexDirection: "row", gap: 8 },
+  gradeButton: {
+    flex: 1,
+    minHeight: 42,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#A9D5C8",
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  gradeButtonSelected: { borderColor: "#275D50", backgroundColor: "#DDF5EB" },
+  gradeText: { color: "#5A625F", fontSize: 16, fontWeight: "700" },
+  gradeTextSelected: { color: "#173F36" },
   input: {
     backgroundColor: "white",
     borderColor: "#A9D5C8",

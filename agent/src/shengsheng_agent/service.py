@@ -3,6 +3,7 @@ from uuid import uuid4
 from shengsheng_contracts import AgentTurnRequest, AgentTurnResponse, RewardDecision
 
 from .policies import CorrectionPolicy, LearnerModel, RewardPolicy, SafetyPolicy
+from .prompts import build_prompt
 from .providers import ResponseProvider, StubResponseProvider
 
 
@@ -40,7 +41,8 @@ class AgentService:
         reward = self.reward.evaluate(request)
         recast = self.correction.recast(request.transcript) if reward.valid_speaking_attempt else None
         updated_profile = self.learner.update(request.learner_profile, reward)
-        reply = await self.provider.reply(request, updated_profile, recast)
+        prompt = build_prompt(updated_profile.grade)
+        reply = await self.provider.reply(request, updated_profile, recast, prompt)
         action = "recast" if recast else ("encourage" if reward.valid_speaking_attempt else "scaffold")
 
         return AgentTurnResponse(
