@@ -11,6 +11,17 @@
     },
     "android": {
       "package": "com.example.shengshengisland"
-    }
+    },
+    "plugins": [
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "允许声生岛听见孩子说英语，以便 Momo 作出回应。",
+          "recordAudioAndroid": true,
+          "enableBackgroundRecording": false
+        }
+      ],
+      "expo-asset"
+    ]
   }
 }
